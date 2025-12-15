@@ -8,73 +8,71 @@ O objetivo é desenvolver um sistema de linha de comando (CLI) para uma loja vir
 
 ## 👥 Distribuição de Responsabilidades da Equipe
 
-Para a primeira etapa do desenvolvimento, a equipe definiu a seguinte divisão de responsabilidades, visando uma melhor organização, produtividade e integração dos componentes do sistema:
+Para a primeira etapa do desenvolvimento, a equipe definiu a seguinte divisão de tarefas:
 
 * **CICERO ANDREILSON SANTOS MENESES**
-    * Responsável pela modelagem e implementação das classes relacionadas a **Produtos e Estoque**, incluindo CRUD de produtos, validações de atributos (preço, estoque, SKU) e métodos especiais aplicáveis.
-    * Atuará também no apoio à persistência de dados dessas entidades.
+    * Responsável pela modelagem e implementação das classes relacionadas a **Produtos e Estoque**, incluindo CRUD de produtos, validações de atributos (preço, estoque, SKU) e métodos especiais.
+    * Atuará também no apoio à persistência de dados.
 
 * **CICERO JEFERSON SANTOS DE ARAÚJO**
-    * Responsável pela estrutura geral do projeto, definição da arquitetura orientada a objetos e implementação das classes de **Cliente e Endereço**, com validações de email, CPF e unicidade.
-    * Ficará responsável pela organização do repositório GitHub e documentação inicial (README).
+    * Responsável pela estrutura geral do projeto e implementação das classes de **Cliente e Endereço**, com validações de email, CPF e unicidade.
+    * Responsável pela organização do repositório GitHub e documentação inicial.
 
 * **JOSLEY VINICIUS BASTOS DA SILVA**
-    * Responsável pelo desenvolvimento das classes relacionadas ao **Carrinho de Compras e Itens do Carrinho**, incluindo regras de negócio para adição, remoção, alteração de quantidade, cálculo de subtotal e validações de estoque.
+    * Responsável pelo desenvolvimento das classes relacionadas ao **Carrinho de Compras e Itens do Carrinho**, incluindo regras de negócio para adição/remoção de itens e cálculo de subtotal.
 
 * **LIVIA MARIA DE OLIVEIRA FERREIRA**
-    * Responsável pela implementação inicial das classes de **Pedido e Pagamento**, contemplando estados do pedido, regras de transição, cálculo de total, aplicação de frete e registro de pagamentos, conforme os requisitos definidos no projeto.
-
-> A equipe atuará de forma colaborativa, realizando revisões cruzadas de código e integrando as funcionalidades desenvolvidas individualmente.
+    * Responsável pela implementação das classes de **Pedido e Pagamento**, contemplando estados do pedido, cálculo de total, aplicação de frete e registro de pagamentos.
 
 ---
 
 ## 🛠️ Principais Classes do Sistema
 
-Abaixo estão listadas as classes mapeadas para a arquitetura do projeto, seus principais atributos e responsabilidades:
+Abaixo estão listadas as classes do projeto, seus atributos e métodos planejados:
 
 ### 1. Produto
-Representa os itens vendidos na loja. Pode ser especializado em **Produto Físico** ou **Produto Digital**.
-* **Atributos:** SKU (identificador único), nome, categoria, preço, estoque, status (ativo/inativo) e peso (opcional).
-* **Responsabilidades:** Exibir informações, comparação entre produtos (por SKU) e atualização de estoque.
+Representa os itens vendidos na loja (físico ou digital).
+* **Atributos:** SKU, nome, categoria, preço, estoque, ativo, peso (opcional).
+* **Métodos:** Mostrar informações, comparar por SKU, atualizar estoque.
 
 ### 2. Cliente
 Representa o usuário comprador da loja.
-* **Atributos:** ID, nome, e-mail, CPF e lista de endereços.
-* **Responsabilidades:** Identificação única e validação de dados (E-mail/CPF).
+* **Atributos:** ID, nome, e-mail, CPF, lista de endereços.
+* **Métodos:** Comparar por e-mail ou CPF.
 
 ### 3. Endereco
-Composição utilizada pela classe Cliente para dados de entrega.
-* **Atributos:** Rua, número, cidade, UF e CEP.
+Dados de localização para entrega.
+* **Atributos:** Rua, número, cidade, UF, CEP.
 
 ### 4. Carrinho
-Gerencia a intenção de compra do cliente antes do fechamento do pedido.
-* **Atributos:** ID do cliente associado e lista de itens.
-* **Responsabilidades:** Adicionar/remover itens, alterar quantidades e calcular o subtotal provisório. Valida se a quantidade solicitada não excede o estoque.
+Gerencia a compra antes do fechamento.
+* **Atributos:** ID do cliente, lista de itens.
+* **Métodos:** Adicionar item, remover item, alterar quantidade, calcular subtotal. (Regra: validar estoque).
 
 ### 5. ItemCarrinho
-Classe associativa que liga um produto ao carrinho.
-* **Atributos:** SKU, nome do produto, preço unitário (no momento da adição) e quantidade.
+Associa um produto ao carrinho.
+* **Atributos:** SKU, nome, preço, quantidade.
 
 ### 6. Pedido
-Representa a consolidação da compra.
-* **Atributos:** ID, cliente, lista de itens, valor do frete, desconto aplicado, valor total e status (CRIADO, PAGO, ENVIADO, ENTREGUE, CANCELADO).
-* **Responsabilidades:** Calcular total final, aplicar cupons, processar transições de status e gerenciar estorno de estoque em caso de cancelamento.
+Representa a compra finalizada.
+* **Atributos:** ID, cliente, itens, frete, desconto, total, status.
+* **Métodos:** Calcular total, aplicar cupom, registrar pagamento, enviar, entregar, cancelar.
 
 ### 7. ItemPedido
-Garante o histórico do preço do produto no momento da compra (snapshot).
-* **Atributos:** SKU, nome, preço congelado e quantidade.
+Snapshot do produto no momento da compra.
+* **Atributos:** SKU, nome, preço, quantidade.
 
 ### 8. Pagamento
-Registra as transações financeiras do pedido.
-* **Atributos:** ID, ID do pedido, forma de pagamento, valor e data.
-* **Responsabilidades:** Validar se o valor pago cobre o total do pedido e acionar a baixa de estoque.
+Registro financeiro da transação.
+* **Atributos:** ID, ID do pedido, forma de pagamento, valor, data.
+* **Métodos:** Validar se o valor cobre o total e debitar estoque (status PAGO).
 
 ### 9. Cupom
-Permite a aplicação de descontos no pedido.
-* **Atributos:** Código, tipo (valor fixo ou percentual), valor do desconto e data de validade.
-* **Responsabilidades:** Calcular o valor a ser descontado do total.
+Descontos aplicáveis.
+* **Atributos:** Código, tipo (valor ou porcentagem), valor, validade.
+* **Métodos:** Calcular desconto.
 
 ### 10. Frete
-Responsável pelo cálculo do custo de envio.
-* **Atributos:** Tabela de valores por UF, cidade ou faixa de CEP.
-* **Responsabilidades:** Calcular o custo de envio baseado no endereço do cliente.
+Cálculo de logística.
+* **Atributos:** UF, cidade, faixa de CEP, valor.
+* **Métodos:** Calcular frete baseado no endereço.
